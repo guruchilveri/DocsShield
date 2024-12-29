@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   signUpLink: {
     color: colors.greenThemeColor,
-    // fontWeight: Platform.OS === 'ios' ? '800' : 'bold',
+    fontFamily: Platform.OS === 'ios' ? 'Poppins-Medium' : 'Poppins-Bold',
     textDecorationLine: 'underline'
   },
   errorText: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   forServiceTxt: {
     padding: 5,
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     marginTop: 5,
     borderWidth: 1,
     borderRadius: 15,
@@ -81,10 +81,10 @@ const styles = StyleSheet.create({
   titleTxt: {
     padding: 5,
     fontSize: 30,
-    // fontWeight: '700',
+    // fontFamily: 'Poppins-Bold',
     marginTop: 10,
     textAlign: "center",
-    fontFamily: 'Phudu-Black',
+    fontFamily: 'Poppins-Black',
     marginTop: 20
   },
   lgBtn: {

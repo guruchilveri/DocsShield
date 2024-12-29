@@ -13,7 +13,7 @@ function AppText(props) {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Manrope-Medium',
+    fontFamily: 'Poppins-Medium',
     color: colors.black
   }
 })

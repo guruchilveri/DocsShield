@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { CommonStyles } from '../../../comman/components'
 import { useNavigation } from '@react-navigation/native'
+import AppText from '../../../comman/components/AppText'
 
 
 function Profile() {
@@ -10,7 +11,7 @@ function Profile() {
     <View style={[CommonStyles.container, CommonStyles.bgwhite]}>
       <View style={styles.main}>
         <TouchableOpacity onPress={() => { Navigator.navigate('EditProfile') }}>
-          <Text style={styles.customText}>Click to go Edit Profile</Text>
+          <AppText style={styles.customText}>Click to go Edit Profile</AppText>
         </TouchableOpacity>
       </View>
     </View>
@@ -27,6 +28,6 @@ const styles = StyleSheet.create({
   customText: {
     color: 'black',
     fontSize: 30,
-    fontFamily: 'Briem Hand'
+    fontFamily: 'Poppins-Regular'
   },
 });

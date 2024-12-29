@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native'
-import {colors  } from '@common'
+import { colors } from '@common'
 
 const { width } = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    paddingTop:2,
+    paddingTop: 2,
     color: colors.error
   },
   formContainer: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    fontWeight: '400',
+    fontFamily: 'Poppins-Light',
     marginBottom: 10
   },
   uploadSection: {
