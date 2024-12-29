@@ -1,16 +1,44 @@
-import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+// In App.js in a new project
+
+import * as React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { createStaticNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native'
+import { navigationRef } from './navigators/RootNavigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import MainStack from './navigators/MainStack';
+import AuthStack from './navigators/AuthStack';
 
 
-const App = () => {
+const RootStack = createStackNavigator();
+
+export default function App() {
   return (
-    <View style={styles.main}>
-      <Text style={styles.customText}>Hello, Custom Font!</Text>
-    </View>
-  );
-};
+    <NavigationContainer ref={navigationRef}>
+      <RootStack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        {true
+          ? (
+            <RootStack.Screen name='Main' component={MainStack} />
+          )
+          : (
+            <RootStack.Screen
+              name='Auth'
+              component={AuthStack}
+              options={{
+                animationTypeForReplace: false ? 'pop' : 'push'
+              }}
+            />
+          )}
+      </RootStack.Navigator>
 
-
+    </NavigationContainer>
+  )
+}
 const styles = StyleSheet.create({
   main: {
     flex: 1,
@@ -21,7 +49,6 @@ const styles = StyleSheet.create({
   customText: {
     color: 'black',
     fontSize: 30,
-    fontFamily: 'Poppins-medium',
+    fontFamily: 'Poppins-Light',
   },
 });
-export default App;
