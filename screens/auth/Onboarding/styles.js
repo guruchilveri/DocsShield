@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   titleTxt: {
     padding: 5,
     fontSize: 30,
-    fontFamily: 'Poppins-Black',
+    fontFamily: 'Phudu-Black',
     marginTop: 10,
     textAlign: "center",
     marginTop: 20
