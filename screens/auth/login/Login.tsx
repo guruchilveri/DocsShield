@@ -52,7 +52,6 @@ const Login = () => {
           await AsyncStorage.setItem('loggedInUser', JSON.stringify(user));
 
           // Navigate to Home screen
-          Alert.alert('Login Successful', 'Welcome back!');
           navigation.navigate('Home');
         } else {
           Alert.alert('Login Failed', 'Incorrect password.');

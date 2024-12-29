@@ -29,7 +29,6 @@ function Home() {
         await AsyncStorage.removeItem('loggedInUser');
 
         // Navigate to login screen
-        Alert.alert('Logged Out', 'You have successfully logged out.');
         Navigator.navigate('Login'); // Redirect to Auth Stack or Login Screen
       } else {
         Alert.alert('Error', 'No user found to log out.');
