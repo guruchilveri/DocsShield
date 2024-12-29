@@ -3,8 +3,10 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MainStack from './navigators/MainStack';
-import AuthStack from './navigators/AuthStack';
+import Onboarding from './screens/auth/Onboarding/Onboarding';
+import Login from './screens/auth/login/Login';
+import Signup from './screens/auth/signup/Signup';
+import Home from './screens/main/Home/Home';
 
 const RootStack = createStackNavigator();
 
@@ -41,17 +43,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <RootStack.Navigator
+        initialRouteName={alreadyLoggedIn ? 'Home' : 'Login'}
         screenOptions={{
           headerShown: false,
         }}
       >
-        {alreadyLoggedIn ? (
-          // User is logged in, render MainStack
-          <RootStack.Screen name="Main" component={MainStack} />
-        ) : (
-          // User is not logged in, render AuthStack
-          <RootStack.Screen name="Auth" component={AuthStack} />
-        )}
+        <RootStack.Screen name='Onboarding' component={Onboarding} />
+        <RootStack.Screen name='Login' component={Login} />
+        <RootStack.Screen name='Signup' component={Signup} />
+        <RootStack.Screen name='Home' component={Home} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

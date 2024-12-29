@@ -106,7 +106,6 @@ const Signup = ({ navigation }: any) => {
     // Save user and redirect to Login
     const newUser: UserData = { firstName, lastName, aadharNumber, phone, password };
     await saveUser(newUser);
-    Alert.alert('Success', 'Registration successful! Redirecting to Login.');
     navigation.navigate('Login'); // Redirect to Login screen
   };
   return (
