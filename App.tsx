@@ -7,6 +7,7 @@ import Onboarding from './screens/auth/Onboarding/Onboarding';
 import Login from './screens/auth/login/Login';
 import Signup from './screens/auth/signup/Signup';
 import Home from './screens/main/Home/Home';
+import Profile from './screens/main/profile/Profile';
 
 const RootStack = createStackNavigator();
 
@@ -52,6 +53,7 @@ export default function App() {
         <RootStack.Screen name='Login' component={Login} />
         <RootStack.Screen name='Signup' component={Signup} />
         <RootStack.Screen name='Home' component={Home} />
+        <RootStack.Screen name='Profile' component={Profile} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
