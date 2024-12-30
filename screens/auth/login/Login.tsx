@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     paddingHorizontal: 15,
-    borderColor: '#CCC',
+    borderColor: colors.Chinesesilver,
     borderWidth: 1,
     fontSize: 16,
   },

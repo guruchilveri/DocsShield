@@ -33,12 +33,12 @@ interface UserData {
 const Signup = ({ navigation }: any) => {
 
   const [formData, setFormData] = useState<FormData>({
-    firstName: 'Gaurav',
-    lastName: 'Chaudhary',
-    aadharNumber: '123456789012',
-    phone: '1234567890',
-    password: 'Test@123',
-    confirmPassword: 'Test@123',
+    firstName: '',
+    lastName: '',
+    aadharNumber: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     paddingHorizontal: 15,
-    borderColor: '#CCC',
+    borderColor: colors.Chinesesilver,
     borderWidth: 1,
     fontSize: 16,
   },
