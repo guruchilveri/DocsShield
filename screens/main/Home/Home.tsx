@@ -173,7 +173,7 @@ function Home() {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search by first name or last name"
+          placeholder="Search by first name, last name, or Aadhaar number"
           placeholderTextColor="#7f8c8d"
           value={searchText}
           onChangeText={handleSearch}
