@@ -44,7 +44,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <RootStack.Navigator
-        initialRouteName={alreadyLoggedIn ? 'Home' : 'Login'}
+        initialRouteName={alreadyLoggedIn ? 'Home' : 'Onboarding'}
         screenOptions={{
           headerShown: false,
         }}
