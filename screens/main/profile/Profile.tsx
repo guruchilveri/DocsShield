@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, FlatList, Image, Modal, TouchableWithoutFeedback } from 'react-native';
 import { CommonStyles } from '../../../comman/components';
 import CommonAppBar from '../../../comman/components/AppBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,14 +8,16 @@ import AppText from '../../../comman/components/AppText';
 import colors from '../../../comman/colors';
 
 function Profile({ route }: any) {
-  const { customer } = route.params; // Get customer data from navigation params
-  console.log("route.params customer------------------>", customer);
+  const { customer } = route.params;
   const navigation: any = useNavigation();
-  // Function to handle the document upload
+  const [imageDetails, setImageDetails] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State for full-screen image preview
+
   const handleUploadDocument = () => {
     Alert.alert('Upload Document', 'You can upload a document here.');
-    // Add your document upload logic here (e.g., opening file picker)
   };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('loggedInUser');
@@ -25,6 +27,54 @@ function Profile({ route }: any) {
       Alert.alert('Error', 'There was an issue logging out.');
     }
   };
+
+  const getCustomerImageDetails = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem('customInfo');
+      if (!storedData) {
+        Alert.alert('Error', 'No customer data found.');
+        setLoading(false);
+        return;
+      }
+
+      const customerArray: any[] = JSON.parse(storedData);
+      const matchedCustomer = customerArray.find((c) => c.aadhaarNumber === customer.aadhaarNumber);
+
+      if (!matchedCustomer) {
+        Alert.alert('Error', 'Customer not found.');
+        setLoading(false);
+        return;
+      }
+
+      const existingImageDetails = matchedCustomer.imageDetails || [];
+      setImageDetails(existingImageDetails);
+    } catch (error) {
+      console.error('Error retrieving customer details:', error);
+      Alert.alert('Error', 'Failed to retrieve customer details.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCustomerImageDetails();
+  }, []);
+
+  const handleImageClick = (imagePath: string) => {
+    setSelectedImage(imagePath); // Set selected image for full-screen view
+  };
+
+  const closeFullScreenImage = () => {
+    setSelectedImage(null); // Close the full-screen image
+  };
+
+  if (loading) {
+    return <AppText>Loading...</AppText>;
+  }
+
+  if (!imageDetails || imageDetails.length === 0) {
+    return <AppText>No images found for this customer.</AppText>;
+  }
 
   return (
     <View style={[CommonStyles.container, CommonStyles.bgwhite]}>
@@ -36,10 +86,7 @@ function Profile({ route }: any) {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-
         <View style={styles.profileCard}>
-          {/* <AppText style={styles.header}>Customer Profile</AppText> */}
-
           <View style={styles.infoRow}>
             <AppText style={styles.label}>First Name:</AppText>
             <AppText style={styles.text}>{customer.firstName}</AppText>
@@ -71,6 +118,36 @@ function Profile({ route }: any) {
           </View>
         </View>
       </ScrollView>
+      <FlatList
+        data={imageDetails}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal={true} // Align images horizontally
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleImageClick(item.path)}>
+            <Image
+              source={{ uri: item.path }}
+              style={styles.imageThumbnail}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* Modal for full-screen image preview */}
+      {selectedImage && (
+        <Modal
+          visible={true}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={closeFullScreenImage}
+        >
+          <TouchableWithoutFeedback onPress={closeFullScreenImage}>
+            <View style={styles.modalContainer}>
+              <Image source={{ uri: selectedImage }} style={styles.fullScreenImage} />
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      )}
     </View>
   );
 }
@@ -106,7 +183,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-    elevation: 5, // For Android shadow
+    elevation: 5,
   },
   header: {
     fontSize: 28,
@@ -129,6 +206,23 @@ const styles = StyleSheet.create({
     color: colors.darkCharcoal,
     textAlign: 'right',
     flex: 1,
+  },
+  imageThumbnail: {
+    width: 200,
+    height: 200,
+    margin: 10,
+    borderRadius: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  fullScreenImage: {
+    width: '100%',
+    height: '80%',
+    resizeMode: 'contain',
   },
 });
 

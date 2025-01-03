@@ -72,6 +72,9 @@
 		<string>DancingScript-Medium.ttf</string>
 		<string>DancingScript-Regular.ttf</string>
 		<string>DancingScript-SemiBold.ttf</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Allow access to camera</string>
+
 	</array>
 </dict>
 </plist>

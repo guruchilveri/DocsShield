@@ -7,6 +7,8 @@ import CommonAppBar from '../../../comman/components/AppBar';
 import AppText from '../../../comman/components/AppText';
 import SubmitButton from '../../../comman/components/Submitbtn';
 import colors from '../../../comman/colors';
+import CameraModal from '../../../comman/components/CameraModal';
+import { addCustomerImageDetails } from '../../../comman/utility';
 
 function Home() {
   const Navigator: any = useNavigation();
@@ -14,6 +16,8 @@ function Home() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedAadharNumber, setSelectedAadharNumber] = useState<string | null>(null);
+
   const [newUser, setNewUser] = useState({
     firstName: '',
     lastName: '',
@@ -142,7 +146,9 @@ function Home() {
     Navigator.navigate('Profile', { customer });
   };
   const handleUpload = (customer: any) => {
-    // Navigator.navigate('Profile', { customer });
+    console.log('Upload document for:------------->', customer);
+    setSelectedAadharNumber(customer.aadharNumber);
+    setIsCameraModalVisible(true);
   };
 
   const renderUserCard = ({ item }: { item: any }) => (
@@ -161,9 +167,30 @@ function Home() {
     </TouchableOpacity>
   );
 
+  const [isCameraModalVisible, setIsCameraModalVisible]: any = useState<boolean>(false);
+
+  const handlePhotoCaptured = (photo: any) => {
+    if (!selectedAadharNumber) {
+      Alert.alert('Error', 'Aadhaar number is not available.');
+      return;
+    }
+
+    console.log('Captured Photo Details:', photo);
+    addCustomerImageDetails(selectedAadharNumber, photo);
+  };
+  const handleCloseCameraModal = () => {
+    setIsCameraModalVisible(false);
+    setSelectedAadharNumber(null);
+  };
+
 
   return (
     <View style={[CommonStyles.container, CommonStyles.bgwhite]}>
+      <CameraModal
+        visible={isCameraModalVisible}
+        onClose={handleCloseCameraModal}
+        onPhotoCaptured={handlePhotoCaptured}
+      />
       <CommonAppBar title="Home" showBackButton={true} onLogout={handleLogout} />
 
       <View style={styles.searchContainer}>
