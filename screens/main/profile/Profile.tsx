@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, FlatList, Image, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, FlatList, Image, Modal, TouchableWithoutFeedback } from 'react-native';
 import { CommonStyles } from '../../../comman/components';
 import CommonAppBar from '../../../comman/components/AppBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,96 +72,81 @@ function Profile({ route }: any) {
     return <AppText>Loading...</AppText>;
   }
 
-  if (!imageDetails || imageDetails.length === 0) {
-    return <AppText>No images found for this customer.</AppText>;
-  }
-
-  return (
-    <View style={[CommonStyles.container, CommonStyles.bgwhite]}>
-      <CommonAppBar title="Customer Details" showBackButton={true} onLogout={handleLogout} />
+  const renderProfileHeader = () => (
+    <View>
+      {/* Profile Section */}
       <View style={styles.headerContainer}>
         <AppText style={styles.header}>Customer Profile</AppText>
         <TouchableOpacity onPress={handleUploadDocument} style={styles.uploadButton}>
           <AppText style={styles.uploadButtonText}>Upload Document</AppText>
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.profileCard}>
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>First Name:</AppText>
-            <AppText style={styles.text}>{customer.firstName}</AppText>
-          </View>
-
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>Last Name:</AppText>
-            <AppText style={styles.text}>{customer.lastName}</AppText>
-          </View>
-
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>Education:</AppText>
-            <AppText style={styles.text}>{customer.education}</AppText>
-          </View>
-
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>Address:</AppText>
-            <AppText style={styles.text}>{customer.address}</AppText>
-          </View>
-
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>Mobile Number:</AppText>
-            <AppText style={styles.text}>{customer.mobileNumber}</AppText>
-          </View>
-
-          <View style={styles.infoRow}>
-            <AppText style={styles.label}>Aadhar Number:</AppText>
-            <AppText style={styles.text}>{customer.aadharNumber}</AppText>
-          </View>
+      <View style={styles.profileCard}>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>First Name:</AppText>
+          <AppText style={styles.text}>{customer.firstName}</AppText>
         </View>
-      </ScrollView>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>Last Name:</AppText>
+          <AppText style={styles.text}>{customer.lastName}</AppText>
+        </View>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>Education:</AppText>
+          <AppText style={styles.text}>{customer.education}</AppText>
+        </View>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>Address:</AppText>
+          <AppText style={styles.text}>{customer.address}</AppText>
+        </View>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>Mobile Number:</AppText>
+          <AppText style={styles.text}>{customer.mobileNumber}</AppText>
+        </View>
+        <View style={styles.infoRow}>
+          <AppText style={styles.label}>Aadhar Number:</AppText>
+          <AppText style={styles.text}>{customer.aadharNumber}</AppText>
+        </View>
+      </View>
+      <AppText style={styles.galleryTitle}>Documents</AppText>
+    </View>
+  );
+
+  return (
+    <View style={{ flex: 1, width: '100%', }}>
+      <CommonAppBar title="Customer Details" showBackButton={true} onLogout={handleLogout} />
       <FlatList
         data={imageDetails}
         keyExtractor={(item, index) => index.toString()}
-        horizontal={true} // Align images horizontally
+        numColumns={2}
+        ListHeaderComponent={renderProfileHeader}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleImageClick(item.path)}>
-            <Image
-              source={{ uri: item.path }}
-              style={styles.imageThumbnail}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={() => handleImageClick(item.path)} style={styles.imageContainer}>
+              <Image
+                source={{ uri: item.path }}
+                style={styles.imageThumbnail}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
+            {/* <AppText>Documents</AppText> */}
+          </View>
         )}
+        contentContainerStyle={styles.flatListContainer}
       />
-
-      {/* Modal for full-screen image preview */}
-      {selectedImage && (
-        <Modal
-          visible={true}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={closeFullScreenImage}
-        >
-          <TouchableWithoutFeedback onPress={closeFullScreenImage}>
-            <View style={styles.modalContainer}>
-              <Image source={{ uri: selectedImage }} style={styles.fullScreenImage} />
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    paddingHorizontal: 20,
+  flatListContainer: {
+    padding: 10,
+    justifyContent: 'center',
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 20,
-    marginHorizontal: 20,
+    marginTop: 10,
   },
   uploadButton: {
     backgroundColor: colors.fieldfade,
@@ -208,21 +193,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageThumbnail: {
-    width: 200,
-    height: 200,
-    margin: 10,
+    width: 180,
+    height: 180,
     borderRadius: 8,
   },
-  modalContainer: {
+  galleryTitle: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Bold',
+    color: colors.darkCharcoal,
+    marginLeft: 10,
+    marginTop: 15,
+  },
+  imageContainer: {
     flex: 1,
+    margin: 10,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.themeColor,
+    overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  },
-  fullScreenImage: {
-    width: '100%',
-    height: '80%',
-    resizeMode: 'contain',
   },
 });
 
