@@ -30,7 +30,7 @@ const Login = () => {
   const handleLogin = async () => {
     // Validation
     if (!aadhaar.trim() || aadhaar.length !== 12) {
-      Alert.alert('Validation Error', 'Aadhar Card Number must be 12 digits.');
+      Alert.alert('Validation Error', 'Unique ID must be 12 digits.');
       return;
     }
     if (!password.trim() || password.length < 6) {
@@ -71,10 +71,10 @@ const Login = () => {
 
       {/* Aadhaar Number Input */}
       <View style={styles.inputContainer}>
-        <AppText style={styles.label}>Aadhar Card Number</AppText>
+        <AppText style={styles.label}>Unique ID</AppText>
         <TextInput
           style={styles.input}
-          placeholder="Enter Aadhar Card Number"
+          placeholder="Enter Unique ID"
           keyboardType="numeric"
           maxLength={12}
           value={aadhaar}

@@ -81,7 +81,7 @@ const Signup = ({ navigation }: any) => {
       return;
     }
     if (!aadharNumber.trim() || aadharNumber.length !== 12) {
-      Alert.alert('Validation Error', 'Aadhar Card Number must be 12 digits.');
+      Alert.alert('Validation Error', 'Unique ID must be 12 digits.');
       return;
     }
     if (!phone.trim() || !/^\d{10}$/.test(phone)) {
@@ -134,12 +134,12 @@ const Signup = ({ navigation }: any) => {
         />
       </View>
 
-      {/* Aadhar Card Number */}
+      {/* Unique ID */}
       <View style={styles.inputContainer}>
-        <AppText style={styles.label}>Aadhar Card Number</AppText>
+        <AppText style={styles.label}>Unique ID</AppText>
         <TextInput
           style={styles.input}
-          placeholder="Enter Aadhar Card Number"
+          placeholder="Enter Unique ID"
           keyboardType="numeric"
           maxLength={12}
           value={formData.aadharNumber}
