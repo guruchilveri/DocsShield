@@ -23,8 +23,8 @@ interface UserData {
 }
 
 const Login = () => {
-  const [aadhaar, setAadhaar] = useState('123456789012');
-  const [password, setPassword] = useState('Test@123');
+  const [aadhaar, setAadhaar] = useState('');
+  const [password, setPassword] = useState('');
   const navigation: any = useNavigation();
 
   const handleLogin = async () => {
