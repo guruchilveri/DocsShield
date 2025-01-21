@@ -13,6 +13,8 @@ function Profile({ route }: any) {
   const [imageDetails, setImageDetails] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // State for full-screen image preview
+  const [selectedDocument, setSelectedDocument] = useState<any>(null);
+  const [isPreviewVisible, setPreviewVisible] = useState(false);
 
   const handleUploadDocument = () => {
     Alert.alert('Upload Document', 'You can upload a document here.');
@@ -110,29 +112,71 @@ function Profile({ route }: any) {
       <AppText style={styles.galleryTitle}>Documents</AppText>
     </View>
   );
+  const renderUserCard = ({ item }: { item: any }) => (
+    <View style={styles.card}>
+      <View style={styles.cardContent}>
+        <View style={{ flex: 1 }}>
+          <Image
+            source={{ uri: item.path }}
+            style={styles.imageThumbnail}
+            resizeMode="cover"
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedDocument(item); // Set the selected document for preview
+            setPreviewVisible(true); // Open the preview modal
+          }}
+          style={styles.uploadButton}>
+          <AppText style={styles.uploadButtonText}>Preview Document</AppText>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
 
   return (
-    <View style={{ flex: 1, width: '100%', }}>
+    <View style={{ flex: 1, width: '100%' }}>
       <CommonAppBar title="Customer Details" showBackButton={true} onLogout={handleLogout} />
       <FlatList
         data={imageDetails}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
         ListHeaderComponent={renderProfileHeader}
-        renderItem={({ item }) => (
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity onPress={() => handleImageClick(item.path)} style={styles.imageContainer}>
-              <Image
-                source={{ uri: item.path }}
-                style={styles.imageThumbnail}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-            {/* <AppText>Documents</AppText> */}
-          </View>
-        )}
-        contentContainerStyle={styles.flatListContainer}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderUserCard}
+        contentContainerStyle={styles.flatListContent}
+        ListEmptyComponent={
+          <AppText style={styles.noDataText}>No user information available.</AppText>
+        }
       />
+      {/* Modal for Preview */}
+      <Modal
+        visible={isPreviewVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setPreviewVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setPreviewVisible(false)}>
+          <View style={styles.previewOverlay}>
+            <View style={styles.previewContainer}>
+              {selectedDocument?.path ? (
+                <Image
+                  source={{ uri: selectedDocument.path }}
+                  style={styles.previewImage}
+                  resizeMode="contain"
+                />
+              ) : (
+                <AppText style={styles.noPreviewText}>
+                  No preview available.
+                </AppText>
+              )}
+              <TouchableOpacity
+                onPress={() => setPreviewVisible(false)}
+                style={styles.closeButton}>
+                <AppText style={styles.closeButtonText}>Close</AppText>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 }
@@ -141,6 +185,44 @@ const styles = StyleSheet.create({
   flatListContainer: {
     padding: 10,
     justifyContent: 'center',
+  },
+  previewOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  previewContainer: {
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    padding: 16,
+    width: '90%',
+    height: '70%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  previewImage: {
+    width: '100%',
+    height: '90%',
+    borderRadius: 8,
+  },
+  noPreviewText: {
+    color: colors.black,
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 16,
+  },
+  closeButton: {
+    marginTop: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: colors.fieldfade,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: colors.white,
+    fontSize: 14,
+    fontFamily: 'Poppins-Bold',
   },
   headerContainer: {
     flexDirection: 'row',
@@ -213,6 +295,45 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    color: colors.JapaneseIndigo, // Primary text color from theme
+    marginBottom: 8,
+  },
+  cardText: {
+    fontSize: 14,
+    color: colors.OsloGrey, // Secondary text color from theme
+    // marginBottom: 4,
+    marginVertical: 10,
+  },
+  flatListContent: {
+    padding: 16,
+  },
+  noDataText: {
+    fontSize: 16,
+    color: colors.OsloGrey,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  card: {
+    backgroundColor: colors.white, // Background matches the light theme
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    borderColor: colors.GrayColor, // Border matches the theme
+    borderWidth: 1,
+    shadowColor: colors.black, // Shadow color matches the theme
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // Space between text and upload button
   },
 });
 
